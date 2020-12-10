@@ -1,0 +1,208 @@
+int tDelay = 100;
+int latchPin = 11;      // (11) ST_CP [RCK] on 74HC595
+int clockPin = 9;      // (9) SH_CP [SCK] on 74HC595
+int dataPin = 12;     // (12) DS [S1] on 74HC595
+int BPM = 0;
+int scrollSpeed = 0;
+int patternButton = 8;
+int patternState = 0;
+int lightSeq = 0;
+byte leds = 0;
+
+void updateShiftRegister()
+{
+   digitalWrite(latchPin, LOW);
+   shiftOut(dataPin, clockPin, LSBFIRST, leds);
+   digitalWrite(latchPin, HIGH);
+}
+
+void setup() 
+{
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  pinMode(patternButton, INPUT);
+}
+
+void loop() 
+{
+  lightSelect();
+  if (lightSeq == 1)
+  {
+   pattern_2(5);
+  }else{
+    pattern_1(5);
+  }
+ }
+
+void lightSelect()
+{
+  patternState = digitalRead(patternButton); 
+  if (patternState == HIGH){
+    if (lightSeq == 1){
+    lightSeq = 1-1;    
+    }else{
+    lightSeq = 1;
+    }
+  }  
+}
+
+
+
+void pattern_1(int duration)
+{
+
+for (int i = 0; i < duration; i++){  
+BPM = 25;
+delay(BPM);
+    side_1_alt();
+    delay(BPM);
+    leds = 0;
+    updateShiftRegister();
+    delay(BPM);
+    side_2_alt();
+    delay(BPM);
+    leds = 0;
+    updateShiftRegister();
+}
+}
+
+void pattern_2(int duration)
+{
+  for (int i = 0; i < duration; i++){ 
+BPM = 100;
+delay(BPM);
+    side_1();
+    delay(BPM);
+    leds = 0;
+    updateShiftRegister();
+    delay(BPM);
+    side_2();
+    delay(BPM);
+    leds = 0;
+    updateShiftRegister();
+  }
+}
+
+void pattern_3(int duration)
+{
+  for (int i = 0; i < duration; i++){ 
+BPM = 100;
+scrollSpeed = 75;
+delay(BPM);
+    bitSet(leds, 0);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 1);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 2);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 3);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 4);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 5);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 6);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 7);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    delay(scrollSpeed);
+    leds = 0;
+    updateShiftRegister();
+  }
+}
+
+void pattern_4(int duration)
+{
+  for (int i = 0; i < duration; i++){ 
+BPM = 100;
+scrollSpeed = 100;
+delay(BPM);
+    bitSet(leds, 7);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 6);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 5);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 4);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 3);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 2);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 1);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    bitSet(leds, 0);
+    delay(scrollSpeed);  
+    updateShiftRegister();
+    delay(scrollSpeed);
+    leds = 0;
+    updateShiftRegister();
+  }
+}
+
+
+  void side_1()
+  {
+  leds = 0;
+  updateShiftRegister();
+  bitSet(leds , 0);
+  bitSet(leds , 1);
+  bitSet(leds , 2);
+  bitSet(leds , 3);
+  updateShiftRegister();
+  delay(50);  
+  }
+
+   void side_2()
+  {
+  leds = 0;
+  updateShiftRegister();
+  bitSet(leds , 4);
+  bitSet(leds , 5);
+  bitSet(leds , 6);
+  bitSet(leds , 7);
+  updateShiftRegister();
+  delay(50);  
+  }
+
+  void side_1_alt()
+  {
+  leds = 0;
+  updateShiftRegister();
+  bitSet(leds , 0);
+  bitSet(leds , 2);
+  bitSet(leds , 4);
+  bitSet(leds , 6);
+  updateShiftRegister();
+  delay(50);  
+  }
+
+   void side_2_alt()
+  {
+  leds = 0;
+  updateShiftRegister();
+  bitSet(leds , 1);
+  bitSet(leds , 3);
+  bitSet(leds , 5);
+  bitSet(leds , 7);
+  updateShiftRegister();
+  delay(50);  
+  }
+
+  
